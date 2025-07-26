@@ -1,21 +1,23 @@
 .container {
-  background-color: #f8f9fa;
-  min-height: 100vh;
-}
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
 
-.card {
-  border-radius: 12px;
-  background-color: #ffffff;
-}
+  h2 {
+    font-weight: 600;
+  }
 
-h2 {
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #212529;
-}
+  .table {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  }
 
-.table {
-  th, td {
-    font-size: 1rem;
+  .btn {
+    min-width: 80px;
+  }
+
+  .form-control {
+    font-size: 14px;
+    padding: 0.4rem 0.75rem;
   }
 }
