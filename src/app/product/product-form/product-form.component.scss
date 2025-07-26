@@ -1,26 +1,170 @@
 .container {
-  background-color: #f8f9fa;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100vh;
+  background: #f9fafb;
 }
 
-.card {
+.form-card {
+  background: white;
   border-radius: 12px;
-  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
 }
 
-h2 {
-  font-weight: 600;
+.form-header {
+  background: #f9fafb;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.form-header h2 {
+  margin: 0;
   font-size: 1.5rem;
-  color: #212529;
+  font-weight: 600;
+  color: #111827;
+}
+
+.product-form {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .form-label {
-  font-size: 1rem;
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
 }
 
-.form-control {
-  font-size: 1rem;
-  padding: 0.6rem 0.75rem;
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
+  font-size: 0.875rem;
+  color: #111827;
+  background: white;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
+}
+
+/* Input validation states */
+.form-input.ng-invalid.ng-touched {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 1px #dc2626;
+}
+
+.form-input.ng-valid.ng-touched {
+  border-color: #059669;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .form-header {
+    padding: 1rem 1.25rem;
+  }
+  
+  .form-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .product-form {
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 0.875rem 1rem;
+  }
+}
+
+/* Loading state for button */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:disabled:hover {
+  background: #3b82f6;
+  transform: none;
+  box-shadow: none;
 }

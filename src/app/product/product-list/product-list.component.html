@@ -1,79 +1,60 @@
-<div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Product List</h2>
-    <button class="btn btn-success" (click)="addProduct()">Add Product</button>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Products</h2>
+    <button class="btn btn-primary" (click)="addProduct()">Add Product</button>
   </div>
 
-  <!-- Search Mode Toggle -->
-  <div class="mb-3">
-    <label class="form-label fw-bold">Search Mode:</label>
-    <div class="btn-group">
-      <button type="button" class="btn btn-outline-primary" [class.active]="!isAdvanced" (click)="isAdvanced = false">
-        Basic
-      </button>
-      <button type="button" class="btn btn-outline-secondary" [class.active]="isAdvanced" (click)="isAdvanced = true">
-        Advanced
-      </button>
+  <!-- Search Controls -->
+  <div class="search-section">
+    <div class="search-mode">
+      <span class="mode-label">Search:</span>
+      <div class="mode-toggle">
+        <button type="button" class="mode-btn" [class.active]="!isAdvanced" (click)="isAdvanced = false">Basic</button>
+        <button type="button" class="mode-btn" [class.active]="isAdvanced" (click)="isAdvanced = true">Advanced</button>
+      </div>
     </div>
+
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="search-form">
+      <div class="form-row">
+        <input type="text" class="form-input" placeholder="Product name" formControlName="name">
+        <input type="number" class="form-input" placeholder="Min price" formControlName="minPrice">
+        <input type="number" class="form-input" placeholder="Max price" formControlName="maxPrice">
+        
+        <ng-container *ngIf="isAdvanced">
+          <select class="form-input" formControlName="hasDiscount">
+            <option [ngValue]="null">Any discount</option>
+            <option [ngValue]="true">Has discount</option>
+            <option [ngValue]="false">No discount</option>
+          </select>
+          <input type="number" class="form-input" placeholder="Qty greater than" formControlName="quantityGt">
+          <input type="text" class="form-input" placeholder="Search in name/description" formControlName="searchText">
+        </ng-container>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" class="btn btn-secondary" (click)="resetSearch()">Reset</button>
+      </div>
+    </form>
   </div>
 
-  <!-- Search Form -->
-  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="row gy-2 gx-3 align-items-center mb-4">
-    <!-- Basic -->
-    <div class="col-md-3">
-      <input type="text" class="form-control" placeholder="Name" formControlName="name">
-    </div>
-    <div class="col-md-2">
-      <input type="number" class="form-control" placeholder="Min Price" formControlName="minPrice">
-    </div>
-    <div class="col-md-2">
-      <input type="number" class="form-control" placeholder="Max Price" formControlName="maxPrice">
-    </div>
-
-    <!-- Advanced Only -->
-    <ng-container *ngIf="isAdvanced">
-      <div class="col-md-4">
-        <input type="text" class="form-control" formControlName="name" placeholder="Name (starts with)">
-      </div>
-
-      <div class="col-md-2">
-        <select class="form-select" formControlName="hasDiscount">
-          <option [ngValue]="null">Any Discount</option>
-          <option [ngValue]="true">Has Discount</option>
-          <option [ngValue]="false">No Discount</option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <input type="number" class="form-control" placeholder="Quantity >" formControlName="quantityGt">
-      </div>
-      <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Search Text (name/desc)" formControlName="searchText">
-      </div>
-    </ng-container>
-
-    <!-- Buttons -->
-    <div class="col-md-2 d-flex gap-2">
-      <button type="submit" class="btn btn-primary w-100">Search</button>
-      <button type="button" class="btn btn-secondary w-100" (click)="resetSearch()">Reset</button>
-    </div>
-  </form>
-
-  <!-- Product Table -->
-  <div class="table-responsive">
-    <table class="table table-hover table-bordered align-middle text-center">
-      <thead class="table-light">
+  <!-- Products Table -->
+  <div class="table-container">
+    <table class="products-table">
+      <thead>
         <tr>
-          <th (click)="setSort('name')" style="cursor: pointer">
+          <th class="sortable" (click)="setSort('name')">
             Name
-            <span *ngIf="sortField === 'name'">
-              <i class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            <span *ngIf="sortField === 'name'" class="sort-icon">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
             </span>
           </th>
           <th>Description</th>
-          <th (click)="setSort('price')" style="cursor: pointer">
+          <th class="sortable" (click)="setSort('price')">
             Price (₹)
-            <span *ngIf="sortField === 'price'">
-              <i class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+            <span *ngIf="sortField === 'price'" class="sort-icon">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
             </span>
           </th>
           <th>Quantity</th>
@@ -82,31 +63,31 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of products">
-          <td>{{ p.name }}</td>
-          <td>{{ p.description }}</td>
-          <td>{{ p.price | currency: 'INR' }}</td>
-          <td>{{ p.quantity }}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-info me-1" (click)="editProduct(p.id!)">Edit</button>
-            <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(p.id!)">Delete</button>
+          <td class="product-name">{{ p.name }}</td>
+          <td class="description">{{ p.description }}</td>
+          <td class="price">{{ p.price | currency: 'INR' }}</td>
+          <td class="quantity">{{ p.quantity }}</td>
+          <td class="actions">
+            <button class="action-btn edit-btn" (click)="editProduct(p.id!)">Edit</button>
+            <button class="action-btn delete-btn" (click)="deleteProduct(p.id!)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Pagination (only for basic search) -->
-  <nav *ngIf="!isAdvanced && totalPages > 1" class="mt-4">
-    <ul class="pagination justify-content-center mb-0">
-      <li class="page-item" [class.disabled]="page === 0">
-        <button class="page-link" (click)="onPageChange(page - 1)" [disabled]="page === 0">Previous</button>
-      </li>
-      <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="i === page">
-        <button class="page-link" (click)="onPageChange(i)">{{ i + 1 }}</button>
-      </li>
-      <li class="page-item" [class.disabled]="page === totalPages - 1">
-        <button class="page-link" (click)="onPageChange(page + 1)" [disabled]="page === totalPages - 1">Next</button>
-      </li>
-    </ul>
+  <!-- Pagination -->
+  <nav *ngIf="!isAdvanced && totalPages > 1" class="pagination-nav">
+    <button class="page-btn" (click)="onPageChange(page - 1)" [disabled]="page === 0">← Previous</button>
+    <div class="page-numbers">
+      <button 
+        *ngFor="let p of [].constructor(totalPages); let i = index" 
+        class="page-btn page-number" 
+        [class.active]="i === page"
+        (click)="onPageChange(i)">
+        {{ i + 1 }}
+      </button>
+    </div>
+    <button class="page-btn" (click)="onPageChange(page + 1)" [disabled]="page === totalPages - 1">Next →</button>
   </nav>
 </div>
